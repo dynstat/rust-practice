@@ -1,5 +1,5 @@
 mod utils;
-use utils::array::{mod_arr, print_arr};
+use utils::array::{mod_arr};
 use utils::file_handling::{read_file, write_file_simple, write_file_with_match};
 
 fn main() {
@@ -9,43 +9,115 @@ fn main() {
     let mut my_int_array: [i8; 6] = [1, 2, 3, 4, 5, 6];
     let mut my_float_array: [f32; 5] = [1.0, 2.0, 3.0, 4.0, 5.0];
     let mut my_i32_array: [i32; 4] = [10, 20, 30, 40];
+    let mut my_str_array: [&str; 3] = ["foo", "bar", "baz"];
+    println!("Original &str array:");
+    // print_arr(&my_str_array);
 
-    print_arr(&my_string_array);
-    print_arr(&my_int_array);
+    match mod_arr(&mut my_str_array) {
+        utils::array::ModArrResult::NewArray(new_array) => {
+            println!("The returned value is {:?}",new_array);
+
+            for (index, value) in new_array.iter().enumerate() {
+                println!("str Index {}: {}", index, value);
+            }
+        },
+        // utils::array::ModArrResult::Error(e) => println!("Error: {}", e),
+        _ => {}
+    }
+
+    // print_arr(&my_string_array);
+    // print_arr(&my_int_array);
 
     // Call mod_arr on string array
-    if let Some(new_string_vec) = mod_arr(&mut my_string_array) {
-        println!("New string array created: {:?}", new_string_vec);
+    match mod_arr(&mut my_string_array) {
+        utils::array::ModArrResult::NewArray(new_array) => {
+            println!("String array processed successfully! New array created:");
+            for (index, value) in new_array.iter().enumerate() {
+                println!("Index {}: {}", index, value);
+            }
+        },
+        utils::array::ModArrResult::ModifiedValues(modified_map) => {
+            println!("String array modified values:");
+            for (index, value) in modified_map {
+                println!("Index {}: {}", index, value);
+            }
+        },
+        utils::array::ModArrResult::Error(e) => println!("Error: {}", e),
     }
 
     // Call mod_arr on int array - this modifies in place
     println!("Before modification:");
-    print_arr(&my_int_array);
+    // print_arr(&my_int_array);
 
-    mod_arr(&mut my_int_array);
+    match mod_arr(&mut my_int_array) {
+        utils::array::ModArrResult::ModifiedValues(modified_map) => {
+            println!("Integer array modified successfully!");
+            println!("Modified values: {:?}", modified_map);
+            // for (index, value) in modified_map {
+            //     println!("Index {}: {}", index, value);
+            // }
+        },
+        utils::array::ModArrResult::NewArray(new_array) => {
+            println!("Integer array new array created:");
+            for (index, value) in new_array.iter().enumerate() {
+                println!("Index {}: {}", index, value);
+            }
+        },
+        utils::array::ModArrResult::Error(e) => println!("Error: {}", e),
+    }
 
     println!("After modification (odd indices should be incremented by 1):");
-    print_arr(&my_int_array);
+    // print_arr(&my_int_array);
 
     // Test with float array
     println!("\nTesting with f32 array:");
     println!("Before modification:");
-    print_arr(&my_float_array);
+    // print_arr(&my_float_array);
 
-    mod_arr(&mut my_float_array);
+    match mod_arr(&mut my_float_array) {
+        utils::array::ModArrResult::ModifiedValues(modified_map) => {
+            println!("Float array modified successfully!");
+            println!("Modified values: {:?}", modified_map);
+            // for (index, value) in modified_map {
+            //     println!("Index {}: {}", index, value);
+            // }
+        },
+        utils::array::ModArrResult::NewArray(new_array) => {
+            println!("Float array new array created:");
+            for (index, value) in new_array.iter().enumerate() {
+                println!("Index {}: {}", index, value);
+            }
+        },
+        utils::array::ModArrResult::Error(e) => println!("Error: {}", e),
+    }
 
     println!("After modification (odd indices should be incremented by 1.0):");
-    print_arr(&my_float_array);
+    // print_arr(&my_float_array);
 
     // Test with i32 array
     println!("\nTesting with i32 array:");
     println!("Before modification:");
-    print_arr(&my_i32_array);
+    // print_arr(&my_i32_array);
 
-    mod_arr(&mut my_i32_array);
+    match mod_arr(&mut my_i32_array) {
+        utils::array::ModArrResult::ModifiedValues(modified_map) => {
+            println!("i32 array modified successfully!");
+            println!("Modified values:");
+            for (index, value) in modified_map {
+                println!("Index {}: {}", index, value);
+            }
+        },
+        utils::array::ModArrResult::NewArray(new_array) => {
+            println!("i32 array new array created:");
+            for (index, value) in new_array.iter().enumerate() {
+                println!("Index {}: {}", index, value);
+            }
+        },
+        utils::array::ModArrResult::Error(e) => println!("Error: {}", e),
+    }
 
     println!("After modification (odd indices should be incremented by 1):");
-    print_arr(&my_i32_array);
+    // print_arr(&my_i32_array);
 
     println!("\nHello, world!");
 
@@ -99,5 +171,43 @@ fn main() {
     match read_file("test.txt") {
         Ok(contents) => println!("File contents: {}", contents),
         Err(e) => println!("Error reading file: {}", e),
+    }
+
+    // Test with unsupported type (bool array)
+    println!("\nTesting with unsupported type (bool array):");
+    let mut bool_array: [bool; 3] = [true, false, true];
+    match mod_arr(&mut bool_array) {
+        utils::array::ModArrResult::ModifiedValues(modified_map) => {
+            println!("Bool array modified successfully!");
+            for (index, value) in modified_map {
+                println!("Index {}: {}", index, value);
+            }
+        },
+        utils::array::ModArrResult::NewArray(new_array) => {
+            println!("Bool array new array created:");
+            for (index, value) in new_array.iter().enumerate() {
+                println!("Index {}: {}", index, value);
+            }
+        },
+        utils::array::ModArrResult::Error(e) => println!("Error: {}", e),
+    }
+
+    // Test with &str array
+    println!("\nTesting with &str array:");
+    let mut str_array: [&str; 3] = ["Hello", "World", "Rust"];
+    match mod_arr(&mut str_array) {
+        utils::array::ModArrResult::NewArray(new_array) => {
+            println!("&str array processed successfully! New array created:");
+            for (index, value) in new_array.iter().enumerate() {
+                println!("Index {}: {}", index, value);
+            }
+        },
+        utils::array::ModArrResult::ModifiedValues(modified_map) => {
+            println!("&str array modified values:");
+            for (index, value) in modified_map {
+                println!("Index {}: {}", index, value);
+            }
+        },
+        utils::array::ModArrResult::Error(e) => println!("Error: {}", e),
     }
 }
