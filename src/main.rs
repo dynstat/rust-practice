@@ -25,9 +25,6 @@ fn main() {
         _ => {}
     }
 
-    // print_arr(&my_string_array);
-    // print_arr(&my_int_array);
-
     // Call mod_arr on string array
     match mod_arr(&mut my_string_array) {
         utils::array::ModArrResult::NewArray(new_array) => {
