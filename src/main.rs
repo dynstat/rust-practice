@@ -2,7 +2,8 @@ mod utils;
 use utils::array::{mod_arr};
 use utils::file_handling::{read_file, write_file_simple, write_file_with_match};
 
-fn main() {
+
+fn test_arrays(){
     // This is for the array module
     let mut my_string_array: [String; 3] =
         ["Hello".to_string(), "World".to_string(), "!".to_string()];
@@ -116,95 +117,106 @@ fn main() {
     println!("After modification (odd indices should be incremented by 1):");
     // print_arr(&my_i32_array);
 
+}
+
+fn test_file_handling(){
+        // Example usage of file handling functions
+        let content = "Hello from Rust file handling!";
+
+        // Using the simple write function with multiple lines in each arm
+        match write_file_simple("test.txt", content) {
+            Ok(_) => {
+                println!("File written successfully!");
+                println!(
+                    "Logging: Operation completed at {}",
+                    std::time::SystemTime::now()
+                        .duration_since(std::time::UNIX_EPOCH)
+                        .unwrap()
+                        .as_secs()
+                );
+                println!("File size: {} bytes", content.len());
+            }
+            Err(e) => {
+                println!("Error writing file: {}", e);
+                println!(
+                    "Logging: Error occurred at {}",
+                    std::time::SystemTime::now()
+                        .duration_since(std::time::UNIX_EPOCH)
+                        .unwrap()
+                        .as_secs()
+                );
+                println!("Attempting to create backup...");
+                // You could add backup logic here
+            }
+        }
+    
+        // Using the match-based write function with multiple lines
+        match write_file_with_match("test2.txt", content) {
+            Ok(x) => {
+                println!("File written with match successfully! with output = {}", x);
+                println!("Additional processing for successful write...");
+                println!("Validating file contents...");
+                // You could add validation logic here
+            }
+            Err(e) => {
+                println!("Error writing file: {}", e);
+                println!("Error type: {:?}", e.kind());
+                println!("Attempting recovery...");
+                // You could add recovery logic here
+            }
+        }
+    
+        // Reading a file
+        match read_file("test.txt") {
+            Ok(contents) => println!("File contents: {}", contents),
+            Err(e) => println!("Error reading file: {}", e),
+        }
+    
+        // Test with unsupported type (bool array)
+        println!("\nTesting with unsupported type (bool array):");
+        let mut bool_array: [bool; 3] = [true, false, true];
+        match mod_arr(&mut bool_array) {
+            utils::array::ModArrResult::ModifiedValues(modified_map) => {
+                println!("Bool array modified successfully!");
+                for (index, value) in modified_map {
+                    println!("Index {}: {}", index, value);
+                }
+            },
+            utils::array::ModArrResult::NewArray(new_array) => {
+                println!("Bool array new array created:");
+                for (index, value) in new_array.iter().enumerate() {
+                    println!("Index {}: {}", index, value);
+                }
+            },
+            utils::array::ModArrResult::Error(e) => println!("Error: {}", e),
+        }
+    
+        // Test with &str array
+        println!("\nTesting with &str array:");
+        let mut str_array: [&str; 3] = ["Hello", "World", "Rust"];
+        match mod_arr(&mut str_array) {
+            utils::array::ModArrResult::NewArray(new_array) => {
+                println!("&str array processed successfully! New array created:");
+                for (index, value) in new_array.iter().enumerate() {
+                    println!("Index {}: {}", index, value);
+                }
+            },
+            utils::array::ModArrResult::ModifiedValues(modified_map) => {
+                println!("&str array modified values:");
+                for (index, value) in modified_map {
+                    println!("Index {}: {}", index, value);
+                }
+            },
+            utils::array::ModArrResult::Error(e) => println!("Error: {}", e),
+        }
+
+}
+fn main() {
+
     println!("\nHello, world!");
 
-    // Example usage of file handling functions
-    let content = "Hello from Rust file handling!";
+    test_arrays();
+    test_file_handling();
 
-    // Using the simple write function with multiple lines in each arm
-    match write_file_simple("test.txt", content) {
-        Ok(_) => {
-            println!("File written successfully!");
-            println!(
-                "Logging: Operation completed at {}",
-                std::time::SystemTime::now()
-                    .duration_since(std::time::UNIX_EPOCH)
-                    .unwrap()
-                    .as_secs()
-            );
-            println!("File size: {} bytes", content.len());
-        }
-        Err(e) => {
-            println!("Error writing file: {}", e);
-            println!(
-                "Logging: Error occurred at {}",
-                std::time::SystemTime::now()
-                    .duration_since(std::time::UNIX_EPOCH)
-                    .unwrap()
-                    .as_secs()
-            );
-            println!("Attempting to create backup...");
-            // You could add backup logic here
-        }
-    }
 
-    // Using the match-based write function with multiple lines
-    match write_file_with_match("test2.txt", content) {
-        Ok(x) => {
-            println!("File written with match successfully! with output = {}", x);
-            println!("Additional processing for successful write...");
-            println!("Validating file contents...");
-            // You could add validation logic here
-        }
-        Err(e) => {
-            println!("Error writing file: {}", e);
-            println!("Error type: {:?}", e.kind());
-            println!("Attempting recovery...");
-            // You could add recovery logic here
-        }
-    }
-
-    // Reading a file
-    match read_file("test.txt") {
-        Ok(contents) => println!("File contents: {}", contents),
-        Err(e) => println!("Error reading file: {}", e),
-    }
-
-    // Test with unsupported type (bool array)
-    println!("\nTesting with unsupported type (bool array):");
-    let mut bool_array: [bool; 3] = [true, false, true];
-    match mod_arr(&mut bool_array) {
-        utils::array::ModArrResult::ModifiedValues(modified_map) => {
-            println!("Bool array modified successfully!");
-            for (index, value) in modified_map {
-                println!("Index {}: {}", index, value);
-            }
-        },
-        utils::array::ModArrResult::NewArray(new_array) => {
-            println!("Bool array new array created:");
-            for (index, value) in new_array.iter().enumerate() {
-                println!("Index {}: {}", index, value);
-            }
-        },
-        utils::array::ModArrResult::Error(e) => println!("Error: {}", e),
-    }
-
-    // Test with &str array
-    println!("\nTesting with &str array:");
-    let mut str_array: [&str; 3] = ["Hello", "World", "Rust"];
-    match mod_arr(&mut str_array) {
-        utils::array::ModArrResult::NewArray(new_array) => {
-            println!("&str array processed successfully! New array created:");
-            for (index, value) in new_array.iter().enumerate() {
-                println!("Index {}: {}", index, value);
-            }
-        },
-        utils::array::ModArrResult::ModifiedValues(modified_map) => {
-            println!("&str array modified values:");
-            for (index, value) in modified_map {
-                println!("Index {}: {}", index, value);
-            }
-        },
-        utils::array::ModArrResult::Error(e) => println!("Error: {}", e),
-    }
 }
