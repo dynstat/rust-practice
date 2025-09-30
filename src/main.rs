@@ -1,12 +1,12 @@
 mod utils;
 use utils::array::{mod_arr};
+use utils::checktypes::{MyTypes, test_types, test_types_match_typeid};
 use utils::file_handling::{read_file, write_file_simple, write_file_with_match};
 
 
 fn test_arrays(){
     // This is for the array module
-    let mut my_string_array: [String; 3] =
-        ["Hello".to_string(), "World".to_string(), "!".to_string()];
+    let mut my_string_array: [String; 3] = ["Hello".to_string(), "World".to_string(), "!".to_string()];
     let mut my_int_array: [i8; 6] = [1, 2, 3, 4, 5, 6];
     let mut my_float_array: [f32; 5] = [1.0, 2.0, 3.0, 4.0, 5.0];
     let mut my_i32_array: [i32; 4] = [10, 20, 30, 40];
@@ -217,6 +217,14 @@ fn main() {
 
     test_arrays();
     test_file_handling();
+    test_types_match_typeid(&"Hello....");
+
+
+
+
+    test_types(MyTypes::STR1("Hello...."));
+    test_types(MyTypes::INT32(99));
+    test_types(MyTypes::FT64(99.99));
 
 
 }
