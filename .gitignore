@@ -1,1 +1,9 @@
 /target
+
+# Environment variables - never commit secrets!
+.env
+.env.local
+.env.*.local
+
+# Keep the example file
+!.env.example
