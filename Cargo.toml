@@ -7,19 +7,3 @@ edition = "2024"
 serde = "1.0.228"
 tokio = { version = "1.0", features = ["full"] }
 dotenvy = "0.15"
-
-[[bin]]
-name = "server"
-path = "src/bin/server.rs"
-
-[[bin]]
-name = "client"
-path = "src/bin/client.rs"
-
-[[bin]]
-name = "env_examples"
-path = "src/bin/env_examples.rs"
-
-[[bin]]
-name = "simple_env"
-path = "src/bin/simple_env.rs"
