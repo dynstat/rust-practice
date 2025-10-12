@@ -153,6 +153,7 @@ fn example_config_management() {
     println!("----------------------------");
 
     #[derive(Debug)]
+    #[allow(dead_code)]
     struct AppConfig {
         database_url: String,
         port: u16,

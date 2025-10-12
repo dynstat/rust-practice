@@ -119,6 +119,7 @@ fn test_arrays() {
     // print_arr(&my_i32_array);
 }
 
+#[allow(dead_code)]
 fn test_file_handling() {
     // Example usage of file handling functions
     let content = "Hello from Rust file handling!";
