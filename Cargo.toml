@@ -2,6 +2,7 @@
 name = "rust-practice"
 version = "0.1.0"
 edition = "2024"
+default-run = "rust-practice"
 
 [dependencies]
 serde = "1.0.228"
