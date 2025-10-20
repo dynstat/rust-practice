@@ -1,3 +1,4 @@
+use core::str;
 use std::fs;
 use std::io::{Read, Write};
 // Method 1: Using fs::write (simplest approach)
