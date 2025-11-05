@@ -3,6 +3,8 @@ use utils::array::mod_arr;
 use utils::checktypes::{MyTypes, test_types};
 use utils::file_handling::{read_file, write_file_simple, write_file_with_match};
 
+use utils::test_closure::{Filter, Logger, StderrLogger};
+
 #[allow(dead_code)]
 fn test_arrays() {
     // This is for the array module
@@ -228,4 +230,40 @@ fn main() {
     // Or we can specify types and bracket the body to be fully explicit:
     let add_1f32 = |x: f32| -> f32 { x + 1.0 };
     dbg!(add_1f32(50.));
+
+    // -----------------------
+    // -----------------------
+    // Let's create an instance of our Filter logger.
+    // We call the `Filter::new` function we defined.
+    let logger = Filter::new(
+        // The first argument is the `inner` logger. We provide an instance of `StderrLogger`.
+        // The compiler checks that `StderrLogger` does indeed implement the `Logger` trait.
+        // So, for this specific instance, the generic type `L` becomes `StderrLogger`.
+        StderrLogger,
+        // The second argument is the `predicate`. We provide a closure here.
+        // A closure is an anonymous function you can create on the fly.
+        // - `|...|` defines the parameters for the closure. Here, `_verbosity` and `msg`.
+        //   The underscore `_` in `_verbosity` is a convention to tell the compiler
+        //   (and other programmers) that we are intentionally not using this parameter.
+        // - The code after the `|...|` is the body of the closure.
+        // - The compiler infers that this closure matches the `P: Fn(u8, &str) -> bool` trait bound
+        //   because it takes the correct arguments and `msg.contains(...)` returns a `bool`.
+        // So, for this specific instance, the generic type `P` becomes the unique,
+        // unnameable type of this specific closure.
+        |_verbosity, msg| msg.contains("yikes"),
+    );
+    // `logger` now has the type `Filter<StderrLogger, [closure type]>` and implements `Logger`.
+
+    // Now we can call the `.log()` method on our `logger` instance.
+    // This message does NOT contain "yikes", so the predicate will return `false`.
+    // Nothing will be printed to the console.
+    logger.log(5, "FYI");
+
+    // This message DOES contain "yikes", so the predicate will return `true`.
+    // The `Filter` will then call the `.log()` method of its `inner` logger (`StderrLogger`),
+    // and the message will be printed to stderr.
+    logger.log(1, "yikes, something went wrong");
+
+    // This message does NOT contain "yikes", so it will also be filtered out.
+    logger.log(2, "uhoh");
 }
