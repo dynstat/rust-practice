@@ -20,18 +20,19 @@ fn main() {
         next: None,
     };
     println!("{:?} - {:?}", l2.data, l2.next);
-    let temp = l2
-        .next
-        .unwrap_or(Box::new(LList {
-            data: 99,
-            next: None,
-        }))
-        .data;
-    println!("{:?}", temp);
-    // let l1 = LList {
-    //     data: 100,
-    //     next: Some(Box::new(l2)),
-    // };
-    // let l2_data = l1.next.unwrap();
-    // println!("{:?}", l1.data);
+    // as_deref() and as_ref(), both are used to get the immutable reference to a field of the struct. So that the struct can be used or accessed later
+    let temp = l2.next.as_deref().map(|node| node.data);
+    println!("{:#?}", l2);
+    let mut l1 = LList {
+        data: 100,
+        next: Some(Box::new(l2)),
+    };
+    // let l2_data = l1.next.unwrap(); // this is the partial move of field from the struct. Better to use the as_deref()
+
+    let l2_data = l1.next.as_deref_mut().map(|n| {
+        n.data *= 2;
+        n.data
+    });
+
+    // println!("{:#?} {:#?}", l2.data, l1); // INVALID as l2 was moved inside of the l1 box.
 }
