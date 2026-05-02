@@ -1,18 +1,15 @@
+use std::vec;
+
 fn main() {
     let v: Vec<i32> = vec![1, 2, 3];
 
     // move forces ownership into closure
-    let c = move || {
+    let c = || {
         println!("{:?}", v);
+        drop(v);
     };
 
-    // What traits does `c` implement?
-
-    // It implements:
-    // Fn (because it doesn't mutate or consume)
-    // FnMut (supertrait)
-    // FnOnce (supertrait)
-
+    // print!("{:?}", v); can not be used here as the closure has taken ownership of v.
     c(); // OK
-    c(); // ALSO OK because closure is not consuming its captured state
+    // c(); // NOT VALID as fnOnce.
 }
