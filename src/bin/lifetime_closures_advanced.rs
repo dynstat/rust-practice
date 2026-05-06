@@ -50,6 +50,14 @@ fn main() {
     println!("Longer string: {}", result);
 
     // Test Case 2 & 3
+    let string1 = "ACTIVE";
+    let starting_char = "A";
+    let prefix_checker = create_prefix_checker(starting_char);
+    let res1 = prefix_checker(string1);
+    let res2 = prefix_checker("HELLO");
+
+    println!("res1 -> {res1}\nres2 -> {res2}");
+
     let status = "ACTIVE";
     let logger = get_boxed_logger(status);
     logger("System starting...");
