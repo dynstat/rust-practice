@@ -35,4 +35,9 @@ fn main() {
     });
 
     // println!("{:#?} {:#?}", l2.data, l1); // INVALID as l2 was moved inside of the l1 box.
+
+    // This works because you are accessing the data through its new owner (l1)
+    let x = l1.next.as_ref().unwrap().data;
+    println!("l1.next.as_ref().unwrap().data = {}", x);
+    // println!("{}", l1.next.as_ref().unwrap().data);
 }
