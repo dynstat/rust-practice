@@ -6,8 +6,12 @@ use std::time::Duration;
 fn main() -> std::io::Result<()> {
     // Allow overriding address and message via CLI args
     // Usage: cargo run --bin client -- [ADDR] [MESSAGE]
-    let addr = env::args().nth(1).unwrap_or_else(|| "127.0.0.1:4000".to_string());
-    let message = env::args().nth(2).unwrap_or_else(|| "hello from client".to_string());
+    let addr = env::args()
+        .nth(1)
+        .unwrap_or_else(|| "127.0.0.1:4000".to_string());
+    let message = env::args()
+        .nth(2)
+        .unwrap_or_else(|| "hello from client".to_string());
 
     println!("connecting to {}...", addr);
     let mut stream = TcpStream::connect(&addr)?;

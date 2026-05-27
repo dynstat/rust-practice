@@ -3,9 +3,9 @@ use std::collections::HashMap;
 // Enum to handle different return types
 #[derive(Debug)]
 pub enum ModArrResult<T> {
-    ModifiedValues(HashMap<usize, T>),  // For integers/floats
-    NewArray(Vec<T>),                   // For strings/&str
-    Error(String),                      // For unsupported types or any error occurred in the function
+    ModifiedValues(HashMap<usize, T>), // For integers/floats
+    NewArray(Vec<T>),                  // For strings/&str
+    Error(String), // For unsupported types or any error occurred in the function
 }
 #[allow(dead_code)]
 pub fn print_arr<T>(array: &[T])

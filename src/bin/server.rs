@@ -32,7 +32,9 @@ fn handle_client(mut stream: TcpStream) {
 fn main() -> std::io::Result<()> {
     // Allow overriding address via CLI args
     // Usage: cargo run --bin server -- [ADDR]
-    let addr = env::args().nth(1).unwrap_or_else(|| "127.0.0.1:4000".to_string());
+    let addr = env::args()
+        .nth(1)
+        .unwrap_or_else(|| "127.0.0.1:4000".to_string());
     let listener = TcpListener::bind(&addr)?;
     println!("server listening on {}", addr);
 
@@ -48,5 +50,3 @@ fn main() -> std::io::Result<()> {
 
     Ok(())
 }
-
-

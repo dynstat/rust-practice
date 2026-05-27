@@ -25,4 +25,3 @@ fn main() {
     takes_i8(y);
     // takes_u32(y);
 }
-
