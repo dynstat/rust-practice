@@ -1,5 +1,5 @@
 #![allow(unused)]
-use std::{alloc, fmt::Display};
+use std::fmt::{self, Display};
 
 struct Dog<T> {
     name: T,
@@ -12,22 +12,23 @@ struct Bird<T> {
     can_fly: bool,
 }
 
-trait Desc {
+trait Description {
     fn get_desc(&self) -> String {
         format!("Default get_desc() called !!")
     }
 }
 
-impl<T> Desc for Dog<T>
+impl<T> Description for Dog<T>
 where
     T: Display,
 {
     fn get_desc(&self) -> String {
         print!("The dog is {} and it has {} legs.\n", self.name, self.legs);
-        format!("The dog is {} and it has {} legs.\n", self.name, self.legs)
+        let s = format!("The dog is {} and it has {} legs.\n", self.name, self.legs);
+        s
     }
 }
-impl<T> Desc for Bird<T>
+impl<T> Description for Bird<T>
 where
     T: Display,
 {
@@ -38,7 +39,7 @@ where
 }
 fn print_desc<T>(animal: &T)
 where
-    T: Desc,
+    T: Description,
 {
     // ERROR : Rust only knows that T implements the trait Desc.
     // It has no knowledge of the struct’s fields (legs, name, etc.),
