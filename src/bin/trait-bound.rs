@@ -1,6 +1,14 @@
 #![allow(unused)]
 use std::fmt::{self, Display};
 
+// Why Dog<T> doesn't require a lifetime parameter (e.g., <'a>):
+// 1. T is a generic type parameter (wildcard). It can stand in for any type.
+// 2. A reference type like `&'a String` is a type.
+// 3. When you instantiate `Dog { name: &s, .. }`, the compiler infers `T` to be `&'a String`.
+//    The lifetime `'a` is carried within the type substituted for `T`.
+//
+// Contrast: If we did not use generics and wrote `struct Dog { name: &String }`, 
+// we would be using the `&` symbol directly and must declare a lifetime: `struct Dog<'a> { name: &'a String }`.
 struct Dog<T> {
     name: T,
     legs: i32,
@@ -50,10 +58,12 @@ where
 }
 
 fn main() {
-    let dog1 = Dog {
-        name: "kutta",
-        legs: 4,
-    };
+    let s = String::from("tommy");
+
+    // Here, T is inferred as `&'a String` (a reference type with s's lifetime).
+    // The struct becomes Dog<&'a String>, which is why no explicit lifetime on Dog was needed.
+    let dog1 = Dog { name: &s, legs: 4 };
+
     let dog2 = Dog {
         name: "kutta".to_string(),
         legs: 4,
