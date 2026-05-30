@@ -7,7 +7,7 @@ use std::fmt::{self, Display};
 // 3. When you instantiate `Dog { name: &s, .. }`, the compiler infers `T` to be `&'a String`.
 //    The lifetime `'a` is carried within the type substituted for `T`.
 //
-// Contrast: If we did not use generics and wrote `struct Dog { name: &String }`, 
+// Contrast: If we did not use generics and wrote `struct Dog { name: &String }`,
 // we would be using the `&` symbol directly and must declare a lifetime: `struct Dog<'a> { name: &'a String }`.
 struct Dog<T> {
     name: T,
@@ -49,9 +49,9 @@ fn print_desc<T>(animal: &T)
 where
     T: Description,
 {
-    // ERROR : Rust only knows that T implements the trait Desc.
-    // It has no knowledge of the struct’s fields (legs, name, etc.),
-    // because traits don’t expose fields — they only expose methods.
+    // // ERROR : Rust only knows that T implements the trait Desc.
+    // // It has no knowledge of the struct’s fields (legs, name, etc.),
+    // // because traits don’t expose fields — they only expose methods.
     // println!("{}", animal.legs); // <======
 
     println!("{}", animal.get_desc());
