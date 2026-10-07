@@ -37,6 +37,7 @@ The following binaries are available in the `src/bin` directory:
 - `env_examples`: Examples of how to use environment variables.
 - `simple_env`: A simple example of how to use environment variables.
 - `rough`: A scratchpad for trying out new ideas.
+- `async_l1_lazy` through `async_l5_state_machine`: Part I of the async lessons. See [Notes/ASYNC_RUST_PART_I.md](Notes/ASYNC_RUST_PART_I.md).
 
 ## Utilities
 
